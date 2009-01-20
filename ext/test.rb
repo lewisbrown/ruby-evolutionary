@@ -1,22 +1,21 @@
 require 'evolutionary'
 
-class Deck  
+class Deck
+  include Evolutionary::GeneticAlgorithm
+  
   def initialize
     @stack1 = [1,2,3,4,5]
     @stack2 = [6,7,8,9,10]
   end
   
   def encode
-    genome = ""
+    genome = []
     (1..10).each do |card|
-      if @stack1.include?(card)
-        genome << "0"
-      else
-        genome << "1"
-      end
+      genome << (@stack1.include?(card) ? 0 : 1)
     end
     return genome
   end
+
   
   def decode(genome)
     n=1
@@ -25,14 +24,15 @@ class Deck
     @stack2 = []
     
     genome.each_char do |char|
-      if char == "0"
+      if char == 0
         @stack1 << n.to_i
-      elsif char == "1"
+      elsif char == 1
         @stack2 << n.to_i
       end
       n += 1
     end        
   end
+
   
   def fitness
     sum = @stack1.inject(0){ |a, b| a += b }
@@ -45,10 +45,6 @@ class Deck
   end
 end
 
-class MyGA < Evolutionary::GeneticAlgorithm  
-end
 
 deck = Deck.new
-ga = MyGA.new(deck)
-
-ga.evolve(2000, 20)
+deck.evolve(200, 20)
