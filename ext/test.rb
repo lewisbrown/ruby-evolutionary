@@ -51,4 +51,4 @@ end
 deck = Deck.new
 ga = MyGA.new(deck)
 
-ga.evolve(20000, 20)
+ga.evolve(2000, 20)
