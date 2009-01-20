@@ -1,4 +1,5 @@
 #define INSPECT(rObj) printf("%s\n", STR2CSTR(rb_funcall(rObj, rb_intern("inspect"), 0)))
+#define PRINT(str) printf("%s\n", str);
 #define TRUE 1
 #define FALSE 0
 
@@ -23,6 +24,7 @@ void Init_evolutionary();
 static VALUE cMethod_module_included(VALUE self, VALUE in_class);
 static VALUE method_evolve(VALUE self, VALUE vN_gens, VALUE vPop_size);
 static Population* new_population(VALUE phenome, int pop_size, int g_len, BOOL randomize);
+static char* random_genome(int g_len);
 
 
 // Candidate* tournament_select(VALUE phenome, Candidate* pop, int pop_size);

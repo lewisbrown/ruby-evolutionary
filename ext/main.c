@@ -65,7 +65,25 @@ static Population* new_population(VALUE phenome, int pop_size, int g_len, BOOL r
         c->phenome = phenome;
         c->fitness = -INT_MAX;
         c->rq_update = FALSE;
+        
+        if(randomize) 
+            c->genome = random_genome(g_len);
     }
-    
+        
     pop->candidates = candidates;
+}
+
+
+/*
+    Return a random genome char array of length g_len
+*/
+static char* random_genome(int g_len) {
+    int j;
+    char *genome = ALLOC_N(char, g_len);
+    
+    for(j=0; j < g_len; ++j) {
+        sprintf((genome + j), "%i", rand() % 2);
+    }
+        
+    return genome;
 }
