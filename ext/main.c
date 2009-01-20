@@ -5,7 +5,8 @@
 
 VALUE Module1 = Qnil;
 VALUE Module2 = Qnil;
-VALUE Class  = Qnil;
+VALUE phenome = Qnil;
+
 
 /*
     Initialise modules and classes
@@ -13,21 +14,10 @@ VALUE Class  = Qnil;
 void Init_evolutionary() {
 	Module1 = rb_define_module("Evolutionary");
     Module2 = rb_define_module_under(Module1, "GeneticAlgorithm");
-    Class   = rb_define_class_under(Module2, "Base", rb_cObject);
-
     rb_define_module_function(Module2, "included", cMethod_module_included, 1);
-
-    // rb_define_method(Class, "initialize", method_initialize, 1);
-    // rb_define_method(Class, "evolve", method_evolve, 2);
-    //     rb_define_attr(Class, "phenome", 1, 0);
     
      // seed random numbers
      srand(clock());
-}
-
-VALUE method_initialize(VALUE self, VALUE phenome) {
-    rb_iv_set(self, "@phenome", phenome);
-    return phenome;
 }
 
 
@@ -40,6 +30,42 @@ static VALUE cMethod_module_included(VALUE self, VALUE in_class) {
 }
 
 
+/*
+    Main evolution method, called by user and handles
+    main loop
+*/
 static VALUE method_evolve(VALUE self, VALUE vN_gens, VALUE vPop_size) {
-    INSPECT(self);
+    // This is the object to be evolved: store globally
+    phenome = self;
+    
+    // Process method parameters
+    int n_gens = FIX2INT(vN_gens);
+    int pop_size = FIX2INT(vPop_size);
+    
+    // We need to call encode once, to obtain genome length
+    VALUE ary_genome = rb_funcall(self, rb_intern("encode"), 0);
+    int g_len = RARRAY(ary_genome)->len;
+    
+    // create a new population with random genotypes
+    Population *pop = new_population(self, pop_size, g_len, TRUE);
+}
+
+
+/*
+    Create a new, blank population, and return a pointer to the struct.
+*/
+static Population* new_population(VALUE phenome, int pop_size, int g_len, BOOL randomize) {
+    Population *pop = ALLOC(Population);
+
+    Candidate *candidates = ALLOC_N(Candidate, pop_size);
+
+    int i;
+    for(i=0; i < pop_size; ++i) {
+        Candidate *c = (candidates + i);
+        c->phenome = phenome;
+        c->fitness = -INT_MAX;
+        c->rq_update = FALSE;
+    }
+    
+    pop->candidates = candidates;
 }
