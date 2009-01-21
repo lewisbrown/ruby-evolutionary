@@ -23,10 +23,10 @@ class Deck
     @stack1 = []
     @stack2 = []
     
-    genome.each_char do |char|
-      if char == 0
+    genome.each do |gene|
+      if gene == 0
         @stack1 << n.to_i
-      elsif char == 1
+      elsif gene == 1
         @stack2 << n.to_i
       end
       n += 1
@@ -47,5 +47,5 @@ end
 
 
 deck = Deck.new
-deck.evolve(200, 20)
+deck.evolve(20000, 50)
 

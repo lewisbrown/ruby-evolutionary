@@ -1,5 +1,6 @@
 #define INSPECT(rObj) printf("%s\n", STR2CSTR(rb_funcall(rObj, rb_intern("inspect"), 0)))
-#define PRINT(str) printf("%s\n", str);
+#define PRINTS(str) printf("%s\n", str);
+#define PRINTI(i) printf("%i\n", i);
 #define TRUE 1
 #define FALSE 0
 
@@ -25,12 +26,9 @@ static VALUE cMethod_module_included(VALUE self, VALUE in_class);
 static VALUE method_evolve(VALUE self, VALUE vN_gens, VALUE vPop_size);
 static Population* new_population(VALUE phenome, int pop_size, int g_len, BOOL randomize);
 static char* random_genome(int g_len);
-
-
-// Candidate* tournament_select(VALUE phenome, Candidate* pop, int pop_size);
-// void populate(VALUE phenome, Candidate *pop, int g_len, int pop_size);
-// void free_pop(Candidate *pop, int pop_size);
-// void update_fitness(VALUE phenome, Candidate *pop);
-// void two_point_crossover(char *buf, Candidate *c1, Candidate *c2, int g_len);
-// Candidate* weakest(VALUE phenome, Candidate* pop, int pop_size);
-// Candidate* strongest(VALUE phenome, Candidate* pop, int pop_size);
+static void update_fitness(Population* pop, int g_len);
+static VALUE genome_to_int_array(char *genome, int g_len);
+static Candidate* tournament_select(Population *pop);
+static void two_point_crossover(char *buf, Candidate *c1, Candidate *c2, int g_len);
+static Candidate* weakest(Population *pop);
+static Candidate* strongest(Population *pop);
